@@ -1,0 +1,44 @@
+#!/bin/bash
+source grade_utils
+TIMEOUT=20
+run_in_folder_if_exists "$1"
+
+if [ -z "$DEBUG" ]; then
+	printf "\n\n### Cleaning old files (to prevent this, export DEBUG=1) ###\n"
+	make -f Makefile clean
+fi
+
+total=0
+i=0
+
+let "i=i+1"
+printf "\n\n### Check $i: all tests should pass\n"
+call make -f Makefile test1
+grade_command ./test1
+printf "### Score $i: $grade\n"
+total=$((total + grade))
+
+let "i=i+1"
+printf "\n\n### Check $i: all tests should pass\n"
+call make -f Makefile test2
+grade_command ./test2
+printf "### Score $i: $grade\n"
+total=$((total + grade))
+
+let "i=i+1"
+printf "\n\n### Check $i: clang-tidy should run without warnings in user code\n"
+grade_command make -f Makefile tidy
+printf "### Score $i: $grade\n"
+total=$((total + grade))
+
+let "i=i+1"
+printf "\n\n### Check $i: valgrind should run without errors\n"
+grade_command make -f Makefile valgrind
+printf "### Score $i: $grade\n"
+total=$((total + grade))
+
+
+total=$((total / i))
+printf "\n\nGrade: $total\n\n"
+
+
