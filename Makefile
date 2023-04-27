@@ -2,6 +2,7 @@
 
 CXX=clang++-14
 CXXVERSION=c++2a
+TIDY=clang-tidy-14
 SOURCE_PATH=sources
 OBJECT_PATH=objects
 CXXFLAGS=-std=$(CXXVERSION) -Werror -Wsign-conversion -I$(SOURCE_PATH)
@@ -12,7 +13,7 @@ SOURCES=$(wildcard $(SOURCE_PATH)/*.cpp)
 HEADERS=$(wildcard $(SOURCE_PATH)/*.hpp)
 OBJECTS=$(subst sources/,objects/,$(subst .cpp,.o,$(SOURCES)))
 
-run: test1
+run: test1 test2
 
 demo: Demo.o $(OBJECTS) 
 	$(CXX) $(CXXFLAGS) $^ -o $@
@@ -25,10 +26,11 @@ test2: TestRunner.o StudentTest2.o  $(OBJECTS)
 
 
 tidy:
-	clang-tidy $(HEADERS) $(TIDY_FLAGS) --
+	$(TIDY) $(HEADERS) $(TIDY_FLAGS) --
 
-valgrind:  test1
+valgrind:  test1 test2
 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test1 2>&1 | { egrep "lost| at " || true; }
+	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test2 2>&1 | { egrep "lost| at " || true; }
 
 %.o: %.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
