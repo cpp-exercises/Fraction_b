@@ -129,7 +129,16 @@ namespace ariel {
             return !(fraction1==fraction2);
         }
         friend bool operator>(const Fraction& fraction1, const Fraction& fraction2){
-            return (fraction1.numerator * fraction2.denominator > fraction2.numerator * fraction1.denominator);
+           bool res = fraction1.numerator * fraction2.denominator > fraction2.numerator * fraction1.denominator;
+           if(fraction1.denominator < 0 && fraction2.denominator > 0)
+           {
+            return !res;
+           }
+           else if(fraction2.denominator < 0 && fraction1.denominator > 0)
+           {
+            return !res;
+           }
+           return res;
         }
         
         friend bool operator>(const Fraction& fraction, const float value) {
@@ -140,7 +149,8 @@ namespace ariel {
             return (fraction1>fraction2 || fraction1==fraction2);
         }
         friend bool operator<(const Fraction& fraction1, const Fraction& fraction2){
-            return (fraction1.numerator * fraction2.denominator < fraction2.numerator * fraction1.denominator);
+            
+            return !(fraction1 > fraction2) &&  fraction1!=fraction2;
         }
         friend bool operator<=(const Fraction& fraction1, const Fraction& fraction2){
             return (fraction1==fraction2 || fraction1<fraction2);
