@@ -8,12 +8,16 @@ namespace ariel {
     class Fraction {
 
     public:
+        static constexpr int KFM = 1000;
+
         // Constructors
         Fraction(int numerator,int denominator);
         // coversion constructor 
         Fraction(int num):numerator(num),denominator(1){}
-        Fraction(double num):numerator(num*1000),denominator(1000){}
+        Fraction(double num):numerator(static_cast<int>(num*KFM)),denominator(KFM){}
+
         // defult constructor
+
         Fraction();
         // Copy constructor
        // Fraction(const Fraction& other);
@@ -35,24 +39,25 @@ namespace ariel {
         }
         // int +
         friend Fraction operator+(const int& NUM, const Fraction& fraction) {
-            int new_numerator = NUM * fraction.denominator + fraction.numerator;
-            Fraction res (new_numerator, fraction.denominator);
+            double new_numerator = NUM * fraction.denominator + fraction.numerator;
+            Fraction res (static_cast<int>(new_numerator), fraction.denominator);
             res.simplify();
             return res;
         }
         // float +
         
-        friend Fraction operator+(const float& NUM, const Fraction& frac) {
-            double new_numerator = NUM* frac.denominator + frac.numerator;
-            Fraction res (new_numerator, frac.denominator);
-            res.simplify();
-            return res;
+      friend Fraction operator+(const double& NUM, const Fraction& frac) {
+        double new_numerator = NUM* frac.denominator + frac.numerator;
+        Fraction res (static_cast<int>(new_numerator), frac.denominator);
+        res.simplify();
+        return res;
         }
+
         //+ float
         
         friend Fraction operator+( const Fraction& frac,const float& NUM) {
-            double new_numerator = NUM* frac.denominator + frac.numerator;
-            Fraction res (new_numerator, frac.denominator);
+            double new_numerator = NUM* static_cast<float>(frac.denominator) + static_cast<float>(frac.numerator);
+            Fraction res (static_cast<int>(new_numerator), frac.denominator);
             res.simplify();
             return res;
         }     
@@ -66,8 +71,8 @@ namespace ariel {
         }
 
         friend Fraction operator-( const Fraction& frac,const float& NUM) {
-            Fraction a(NUM);
-            Fraction res =frac-a;
+            Fraction frac2(NUM);
+            Fraction res =frac-frac2;
             res.simplify();
             return res;
         }
@@ -81,15 +86,15 @@ namespace ariel {
         }
         friend Fraction operator*(const float & NUM, const Fraction& fraction) {
             double Nnew=NUM;
-            Fraction a(Nnew);
-            Fraction res =a*fraction;
+            Fraction frac2(Nnew);
+            Fraction res =frac2*fraction;
             res.simplify();
             return res;
         }
          friend Fraction operator*( const Fraction& fraction,const float & NUM) {
             double Nnew=NUM;
-            Fraction a(Nnew);
-            Fraction res =a*fraction;
+            Fraction frac2(Nnew);
+            Fraction res =frac2*fraction;
             res.simplify();
             return res;
         }
@@ -104,15 +109,15 @@ namespace ariel {
             if(NUM==0){
                 throw std::invalid_argument(" cant  numerator/0 ");
             }
-            Fraction a(NUM);
-            Fraction res =fraction1/a;
+            Fraction frac2(NUM);
+            Fraction res =fraction1/frac2;
             res.simplify();
             return res;
         }
           friend Fraction operator/( const float& NUM,const Fraction& fraction1){
             
-            Fraction a(NUM);
-            Fraction res =a/fraction1;
+            Fraction frac2(NUM);
+            Fraction res =frac2/fraction1;
             res.simplify();
             return res;
         }
@@ -151,20 +156,19 @@ namespace ariel {
         friend std::ostream& operator<<(std::ostream& ostream, const Fraction& fraction){
             ostream << fraction.numerator << "/" << fraction.denominator;
             return ostream;
-
         }
-        friend std::istream& operator>>(std::istream& in, Fraction& frac) {
-        int numerator, denominator;
-        char separator;
-        if (!(in >> numerator)) {
+        friend std::istream& operator>>(std::istream& inst, Fraction& frac) {
+        int numerator=0;
+        int denominator=1;
+        if (!(inst >> numerator)) {
             throw std::runtime_error("Invalid input format for Fraction numerator");
         }
 
-        if (!(in >> denominator)) {
+        if (!(inst >> denominator)) {
             throw std::runtime_error("Invalid input format for Fraction denominator");
         }
         frac = Fraction(numerator, denominator);
-        return in;
+        return inst;
     }
 
         int getNumerator() const { return numerator; }
@@ -175,6 +179,7 @@ namespace ariel {
         private:
         int numerator;
         int denominator;
+        
 
     
     };
