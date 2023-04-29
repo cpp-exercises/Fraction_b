@@ -19,11 +19,11 @@ TEST_CASE("Fraction object initialization & Getters return expected values") {
     CHECK(((a.getNumerator() == 1) && (a.getDenominator() == 2)));
 
     // Check that the float constractor's fields are like expected
-    Fraction b(0.3333);
-    CHECK(((b.getNumerator() == 333) && (b.getDenominator() == 1000)));
+     Fraction b(0.3333);
+        CHECK(((b.getNumerator() == 333) && (b.getDenominator() == 1000)));
 
     // Check that a Fraction can't be created if denominator is 0
-    CHECK_THROWS(Fraction(1,0));
+        CHECK_THROWS(Fraction(1,0));
 }
 
 TEST_CASE("Fraction addition test") {
@@ -33,7 +33,7 @@ TEST_CASE("Fraction addition test") {
     CHECK(__gcd(c.getNumerator(), c.getDenominator()) == 1); // Reduced as possible
 
 
-    Fraction d(1, 5);
+     Fraction d(1, 5);
     float e = 0.4; // Will be converted to 2/5
     Fraction f = d + e; // 1/5 + 2/5 = 3/5
     CHECK(((f.getNumerator() == 3) && (f.getDenominator() == 5)));
@@ -250,3 +250,4 @@ TEST_CASE("Rounding of float numbers during arithmetic operations with Fractions
     c = a / b; // 2/1
     CHECK(((c.getNumerator() == 2) && (c.getDenominator() == 1)));
 }
+/**/
