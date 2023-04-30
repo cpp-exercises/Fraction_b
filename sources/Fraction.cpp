@@ -5,6 +5,10 @@ using namespace std;
 namespace ariel {
 
         Fraction::Fraction(int numerator, int denominator){
+            if(denominator== numeric_limits<int>::max() && numerator== numeric_limits<int>::max()){
+                throw overflow_error(" MAX int  ");
+            }
+
             if(denominator==0){
                 throw invalid_argument("Denominator cant be 0 ");
             }
@@ -68,6 +72,14 @@ namespace ariel {
             int gcd = std::__gcd(numerator, denominator);
             numerator /= gcd;
             denominator /= gcd;
+        }
+        void Fraction::ThrowsException(){
+             if(numerator== numeric_limits<int>::max()||denominator== numeric_limits<int>::max() ){
+                throw overflow_error(" MAX int  ");
+            }
+            if(numerator== numeric_limits<int>::min()||denominator== numeric_limits<int>::min() ){
+                throw overflow_error(" MAX int  ");
+            }
         }       
 }
     
