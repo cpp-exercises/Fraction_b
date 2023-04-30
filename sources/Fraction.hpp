@@ -186,11 +186,24 @@ namespace ariel {
         Fraction  operator++(int);
         Fraction & operator--();
         Fraction  operator--(int);
-
+        /*
+        std::ostream& operator<<(std::ostream& os, const Fraction& frac) {
+    if (frac.denominator < 0) {
+        os << "-" << std::abs(frac.numerator) << "/" << std::abs(frac.denominator);
+    } else {
+        os << frac.numerator << "/" << frac.denominator;
+    }
+    return os;
+}
+        */
         //output 
-        friend std::ostream& operator<<(std::ostream& ostream, const Fraction& fraction){
-            ostream << fraction.numerator << "/" << fraction.denominator;
-            return ostream;
+        friend   std::ostream& operator<<(std::ostream& os, const Fraction& frac) {
+            if (frac.denominator < 0) {
+                os << "-" << std::abs(frac.numerator) << "/" << std::abs(frac.denominator);
+            } else {
+                os << frac.numerator << "/" << frac.denominator;
+            }
+            return os;
         }
         friend std::istream& operator>>(std::istream& inst, Fraction& frac) {
         int numerator;

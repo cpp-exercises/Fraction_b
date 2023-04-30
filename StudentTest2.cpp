@@ -473,8 +473,8 @@ TEST_SUITE("Overloaded / operator tests") {
         CHECK_EQ(-0.8 / Fraction{3, 4}, Fraction{-16, 15});
 
         // Equality checks when dividing a floating-point number by a fraction, incorporating negatives
-       // CHECK_EQ(Fraction{-2, 3} / 0.57, Fraction{-200, 171});
-      //  CHECK_EQ(Fraction{3, -4} / -0.82, Fraction{75, 82});
+         CHECK_EQ(Fraction{-2, 3} / 0.57, Fraction{-200, 171});
+        CHECK_EQ(Fraction{3, -4} / -0.82, Fraction{75, 82});
 
 
         // Equality checks when dividing a floating-point number by a fraction, incorporating negatives
@@ -634,7 +634,7 @@ TEST_SUITE("Input and output operators tests") {
         ss.str("");
         Fraction neg_frac{-7, 9};
         ss << neg_frac;
-       // CHECK(ss.str() == "-7/9");
+        CHECK(ss.str() == "-7/9");
 
         // Numerator is positive and denominator is negative
         ss.str("");
