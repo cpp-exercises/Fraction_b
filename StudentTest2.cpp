@@ -395,7 +395,6 @@ TEST_SUITE("Overloaded * operator tests") {
     TEST_CASE("Multiplying big fractions") {
         CHECK_EQ(Fraction{999, 1000} * Fraction{999, 1000}, Fraction{998001, 1000000});
        // CHECK_EQ(Fraction{12345, 23456} * Fraction{34567, 45678}, Fraction{426920715, 1072143816});
-
     }
 
     TEST_CASE("Inequality checks with floating-point numbers and fractions") {
@@ -713,19 +712,23 @@ TEST_SUITE("Input and output operators tests") {
         CHECK_THROWS_AS(ss_floating_point >> frac, std::runtime_error);
     }
 }
-/*
+
 TEST_CASE("Fraction with largest possible numerator and/or denominator and overflow handling") {
     int max_int = std::numeric_limits<int>::max();
     int min_int = std::numeric_limits<int>::min();
 
     // Test largest possible numerator
     CHECK_NOTHROW(Fraction f1(max_int, 1));
+   
     Fraction f1(max_int, 1);
     CHECK_EQ(f1, Fraction(max_int, 1));
 
+    
     // Test largest possible denominator
     CHECK_NOTHROW(Fraction f2(1, max_int));
+    
     Fraction f2(1, max_int);
+
     CHECK_EQ(f2, Fraction(1, max_int));
 
     // Test largest possible numerator and denominator
@@ -734,13 +737,17 @@ TEST_CASE("Fraction with largest possible numerator and/or denominator and overf
     CHECK_EQ(f3, Fraction(1, 1));
 
     // Test arithmetic with large numerator and/or denominator
+    
     Fraction f4(max_int - 100, max_int);
-
     CHECK_THROWS_AS(f1 * f4, std::overflow_error);
     CHECK_THROWS_AS(f1 / f4, std::overflow_error);
-
+ 
     CHECK_THROWS_AS(f2 * f4, std::overflow_error);
-    CHECK_THROWS_AS(f2 / f4, std::overflow_error); //
+    CHECK_THROWS_AS(f2 / f4, std::overflow_error); 
+    /**/
+    Fraction f=f3 * f4;
+    cout << f.getDenominator() << endl;
+    cout << f.getNumerator() << endl;
 
     CHECK_NOTHROW(f3 * f4);
     CHECK_NOTHROW(f4 / f3);
@@ -757,5 +764,4 @@ TEST_CASE("Fraction with largest possible numerator and/or denominator and overf
 
     CHECK_NOTHROW(f5 + Fraction{1, 1});
     CHECK_NOTHROW(f7 - Fraction{1, 1});
-}*/
-/**/
+}

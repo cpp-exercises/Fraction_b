@@ -5,10 +5,7 @@ using namespace std;
 namespace ariel {
 
         Fraction::Fraction(int numerator, int denominator){
-            if(denominator== numeric_limits<int>::max() && numerator== numeric_limits<int>::max()){
-                throw overflow_error(" MAX int  ");
-            }
-
+            int max_int = numeric_limits<int>::max();
             if(denominator==0){
                 throw invalid_argument("Denominator cant be 0 ");
             }

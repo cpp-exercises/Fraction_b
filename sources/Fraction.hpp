@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cmath>
-
+using namespace std;
 namespace ariel {
 
     class Fraction {
@@ -32,13 +32,20 @@ namespace ariel {
 
         //Arithmetic
 
-        friend Fraction operator+(const Fraction & fraction1, const Fraction &fraction2){
-            int Nnew = fraction1.numerator * fraction2.denominator + fraction2.numerator * fraction1.denominator;
-            int Dnew= fraction2.denominator * fraction1.denominator;
-            Fraction res (Nnew,Dnew);
-           res.simplify();
-            return res;
+      friend Fraction operator+(const Fraction& fraction1, const Fraction& fraction2) {
+        int64_t numerator = static_cast<int64_t>(fraction1.numerator) * fraction2.denominator + 
+                            static_cast<int64_t>(fraction2.numerator) * fraction1.denominator;
+        int64_t denominator = static_cast<int64_t>(fraction1.denominator) * fraction2.denominator;
+
+        if (numerator > std::numeric_limits<int>::max() || numerator < std::numeric_limits<int>::min() || 
+            denominator > std::numeric_limits<int>::max() || denominator < std::numeric_limits<int>::min()) {
+            throw std::overflow_error("Overflow during addition");
         }
+
+        Fraction result(static_cast<int>(numerator), static_cast<int>(denominator));
+        result.simplify();
+        return result;
+    }
         // int +
         friend Fraction operator+(const int& NUM, const Fraction& fraction) {
             double new_numerator = NUM * fraction.denominator + fraction.numerator;
@@ -68,13 +75,23 @@ namespace ariel {
             return res;
         }
 
-        friend Fraction operator-(const Fraction& fraction1, const Fraction& fraction2){
-            int Nnew = fraction1.numerator * fraction2.denominator - fraction2.numerator * fraction1.denominator;
-            int Dnew = fraction2.denominator * fraction1.denominator;
-            Fraction res (Nnew,Dnew);
-            res.simplify();
-            return res;
+       friend Fraction operator-(const Fraction& fraction1, const Fraction& fraction2) {
+        if (fraction1.denominator == 0 || fraction2.denominator == 0) {
+            throw std::invalid_argument("Division by zero error!");
         }
+        long long int num = static_cast<long long int>(fraction1.numerator) * fraction2.denominator
+                            - static_cast<long long int>(fraction2.numerator) * fraction1.denominator;
+        long long int den = static_cast<long long int>(fraction1.denominator) * fraction2.denominator;
+
+        if (num > std::numeric_limits<int>::max() || num < std::numeric_limits<int>::min() 
+            || den > std::numeric_limits<int>::max() || den < std::numeric_limits<int>::min()) {
+            throw std::overflow_error("Overflow during subtraction!");
+        }
+
+        Fraction res(static_cast<int>(num), static_cast<int>(den));
+        res.simplify();
+        return res;
+    }
 
         friend Fraction operator-(const Fraction& frac,const double& NUM) {
             Fraction frac2(NUM);
@@ -101,14 +118,21 @@ namespace ariel {
             
         }
         
-       
-        friend Fraction operator*(const Fraction& fraction1, const Fraction& fraction2){
-            int Nnew = fraction1.numerator *  fraction2.numerator ;
-            int Dnew = fraction2.denominator * fraction1.denominator;
-            Fraction res (Nnew,Dnew);
-            res.simplify();
-            return res;
+      friend Fraction operator*(const Fraction& fraction1, const Fraction& fraction2){
+        long long  num = static_cast<long long >(fraction1.numerator) * fraction2.numerator;
+        long long  den = static_cast<long long >(fraction1.denominator) * fraction2.denominator;
+
+        // Check for overflow
+        if (num > std::numeric_limits<int>::max() || num < std::numeric_limits<int>::min() ||
+            den > std::numeric_limits<int>::max() || den < std::numeric_limits<int>::min()) {
+            throw std::overflow_error("Overflow during multiplication");
         }
+        Fraction res(static_cast<int>(num), static_cast<int>(den));
+        res.simplify();
+        return res;
+    }
+
+
         friend Fraction operator*(const double & NUM, const Fraction& fraction) {
             double Nnew=NUM;
             Fraction frac2(Nnew);
@@ -123,8 +147,12 @@ namespace ariel {
             return res;
         }
         friend Fraction operator/(const Fraction& fraction1, const Fraction& fraction2){
+            int max_int = numeric_limits<int>::max();
             if(fraction2.numerator==0){
-                 throw std::runtime_error(" cant  numerator/0 ");
+                throw std::runtime_error(" can't divide by zero ");
+            }
+            if ((fraction1.numerator != 0 && fraction2.denominator != 0) && (fraction1.numerator == max_int || fraction2.denominator == max_int)) {
+                throw std::overflow_error("Overflow during multiplication");
             }
             int Nnew = fraction1.numerator *  fraction2.denominator ;
             int Dnew = fraction1.denominator * fraction2.numerator;
@@ -132,6 +160,7 @@ namespace ariel {
             res.simplify();
             return res;
         }
+
           friend Fraction operator/(const Fraction& fraction1, const double& NUM){
             if(NUM==0){
                 throw std::runtime_error(" cant  numerator/0 ");
@@ -186,28 +215,19 @@ namespace ariel {
         Fraction  operator++(int);
         Fraction & operator--();
         Fraction  operator--(int);
-        /*
-        std::ostream& operator<<(std::ostream& os, const Fraction& frac) {
-    if (frac.denominator < 0) {
-        os << "-" << std::abs(frac.numerator) << "/" << std::abs(frac.denominator);
-    } else {
-        os << frac.numerator << "/" << frac.denominator;
-    }
-    return os;
-}
-        */
+       
         //output 
-        friend   std::ostream& operator<<(std::ostream& os, const Fraction& frac) {
+        friend   std::ostream& operator<<(std::ostream& osin, const Fraction& frac) {
             if (frac.denominator < 0) {
-                os << "-" << std::abs(frac.numerator) << "/" << std::abs(frac.denominator);
+                osin << "-" << std::abs(frac.numerator) << "/" << std::abs(frac.denominator);
             } else {
-                os << frac.numerator << "/" << frac.denominator;
+                osin << frac.numerator << "/" << frac.denominator;
             }
-            return os;
+            return osin;
         }
         friend std::istream& operator>>(std::istream& inst, Fraction& frac) {
-        int numerator;
-        int denominator;
+        int numerator=0;
+        int denominator=1;
         if (!(inst >> numerator)) {
             throw std::runtime_error("Invalid input format for Fraction numerator");
         }
