@@ -28,7 +28,7 @@ test2: TestRunner.o StudentTest2.o  $(OBJECTS)
 tidy:
 	$(TIDY) $(HEADERS) $(TIDY_FLAGS) --
 
-valgrind:  test1 test2
+valgrind :  test1 test2
 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test1 2>&1 | { egrep "lost| at " || true; }
 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test2 2>&1 | { egrep "lost| at " || true; }
 
