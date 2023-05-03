@@ -12,29 +12,12 @@ namespace ariel {
             this->denominator=denominator;
             this->numerator=numerator;
             simplify();
-        }
-/*
-        Fraction::Fraction(const Fraction& other){
-            this->denominator=other.getDenominator();
-            this->numerator=other.getNumerator(); 
-            simplify(); 
-        }
- */       
+        }      
         Fraction::Fraction(){
             this->denominator=1;
             this->numerator=0;
         }
-        /*
-        Fraction& Fraction::operator=(const Fraction &other){
-            if(this != &other)
-            {
-                numerator=other.numerator;
-                denominator=other.denominator;
-            }
-            return *this;
-            
-        }
-*/
+       
         std::string Fraction::to_string()const{
             std::stringstream ss;
             ss << numerator << "/" << denominator;

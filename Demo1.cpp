@@ -12,16 +12,12 @@ int main() {
     Fraction c;
     Fraction d(8);
     Fraction e(0, 1);
-    Fraction f(0.5);
 
     cout << "a: " << a << endl; // 3/4
     cout << "b: " << b << endl; // 2/5
     cout << "c: " << c << endl; // 0/1
     cout << "d: " << d << endl; // 8/1
     cout << "e: " << e << endl; // 0/1
-    cout << "f: " << f << endl; // 500/1000
-    f.simplify();
-    cout << "f: " << f << endl; // 1/2
 
     cout << "a+b: " << a + b << endl; // 23/20
     cout << "a-b: " << a - b << endl; // 7/20

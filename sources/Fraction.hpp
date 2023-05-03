@@ -118,19 +118,18 @@ namespace ariel {
             
         }
         
-      friend Fraction operator*(const Fraction& fraction1, const Fraction& fraction2){
-        long long  num = static_cast<long long >(fraction1.numerator) * fraction2.numerator;
-        long long  den = static_cast<long long >(fraction1.denominator) * fraction2.denominator;
-
-        // Check for overflow
-        if (num > std::numeric_limits<int>::max() || num < std::numeric_limits<int>::min() ||
-            den > std::numeric_limits<int>::max() || den < std::numeric_limits<int>::min()) {
-            throw std::overflow_error("Overflow during multiplication");
+        friend Fraction operator*(const Fraction& fraction1, const Fraction& fraction2){
+            long long  num = static_cast<long long >(fraction1.numerator) * fraction2.numerator;
+            long long  den = static_cast<long long >(fraction1.denominator) * fraction2.denominator;
+            // Check for overflow
+            if (num > std::numeric_limits<int>::max() || num < std::numeric_limits<int>::min() ||
+                den > std::numeric_limits<int>::max() || den < std::numeric_limits<int>::min()) {
+                throw std::overflow_error("Overflow during multiplication");
+            }
+            Fraction res(static_cast<int>(num), static_cast<int>(den));
+            res.simplify();
+            return res;
         }
-        Fraction res(static_cast<int>(num), static_cast<int>(den));
-        res.simplify();
-        return res;
-    }
 
 
         friend Fraction operator*(const double & NUM, const Fraction& fraction) {
@@ -178,8 +177,10 @@ namespace ariel {
             return res;
         }
         // Comparison operators
-        friend bool operator==(const Fraction& fraction1, const Fraction& fraction2){
-            return (fraction1.numerator * fraction2.denominator == fraction2.numerator * fraction1.denominator);
+        friend bool operator==(const Fraction& fraction1, const Fraction& fraction2) {
+        double value1 = static_cast<double>(fraction1.numerator) / fraction1.denominator;
+        double value2 = static_cast<double>(fraction2.numerator) / fraction2.denominator;
+        return std::round(value1 * ROUNDED) == std::round(value2 * ROUNDED);
         }
         friend bool operator!=(const Fraction& fraction1, const Fraction& fraction2){
             return !(fraction1==fraction2);
