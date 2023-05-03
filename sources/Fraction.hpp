@@ -251,8 +251,7 @@ namespace ariel {
         private:
         int numerator;
         int denominator;
-        
-
+    
     
     };
 }
