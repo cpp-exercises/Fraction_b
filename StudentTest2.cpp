@@ -747,8 +747,8 @@ TEST_CASE("Fraction with largest possible numerator and/or denominator and overf
     CHECK_THROWS_AS(f2 / f4, std::overflow_error); 
     /**/
     Fraction f=f3 * f4;
-   // cout << f.getDenominator() << endl;
-   // cout << f.getNumerator() << endl;
+    cout << f.getDenominator() << endl;
+    cout << f.getNumerator() << endl;
 
     CHECK_NOTHROW(f3 * f4);
     CHECK_NOTHROW(f4 / f3);
